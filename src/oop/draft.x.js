@@ -1,9 +1,9 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+#module Legio.draft (
+  Legio = "../std" = Legio
+)
 
 // Function which simulates an interface
-function draft(inherits, data) {
+draft(inherits, data) -> {
   if (!data) {
     data = inherits;
   }
@@ -17,10 +17,10 @@ function draft(inherits, data) {
   return check;
 }
 
-function checkObject(obj) {
-  var data = this;
+checkObject(obj) -> {
+  var data = @;
   
-  for (var i in data) if (Object.owns(data, i)) {
+  #foreach (i in data) {
     var T = data[i], val = obj[i];
     
     if (T === null) {
@@ -46,15 +46,4 @@ function checkObject(obj) {
   return true;
 }
 
-return draft;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.draft = definition(global.Legio);
-}
-})(this);
+#export draft;

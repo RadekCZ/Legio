@@ -44,7 +44,7 @@ if (!Object.create) {
 if (!Object.keys) {
   Object.keys = obj -> {
     var result = [];
-    for (var i in obj) if (Object.owns(obj, i)) {
+    #foreach (i in obj) {
       result.push(i);
     }
     return result;
@@ -52,7 +52,7 @@ if (!Object.keys) {
 }
 Object.isEmpty = Object.empty = obj -> {
   if (!nil(obj)) {
-    for (var prop in obj) if (Object.owns(obj, prop)) {
+    #foreach (prop in obj) {
       return false;
     }
   }
@@ -61,36 +61,35 @@ Object.isEmpty = Object.empty = obj -> {
 Object.clone = clone(source) -> {
   if (Object.is(source) && source !== global && !source.nodeType) {
     var obj = Array.is(source) ? [] : {};
-    for (var i in source) if (Object.owns(source, i)) {
+    #foreach (i in source) {
       obj[i] = clone(source[i]);
     }
     return obj;
   }
   return source;
 };
-Object.extend = extend(what, extension) -> {
-  var i;
+Object.extend = extend(obj, extension) -> {
   if (arguments.length > 2) {
-    for (i = 1; i < arguments.length; ++i) {
-      extend(what, arguments[i]);
+    #foreach (i of arguments) {
+      extend(obj, arguments[i]);
     }
   }
   else {
-    for (i in extension) if (Object.owns(extension, i)) {
-      what[i] = extension[i];
+    #foreach (i in extension) {
+      obj[i] = extension[i];
     }
   }
-  return what;
+  return obj;
 };
 Object.merge = () -> {
   var out = {};
-  for (var i = 0; i < arguments.length; ++i) {
+  #foreach (i of arguments) {
     Object.extend(out, arguments[i]);
   }
   return out;
 };
 Object.forEach = Object.each = (obj, func) -> {
-  for (var i in obj) if (Object.owns(obj, i)) {
+  #foreach (i in obj) {
     if (func.call(obj, obj[i], i, obj)) {
       break;
     }
@@ -149,7 +148,7 @@ if (!ArrayProto.lastIndexOf) {
 }
 if (!ArrayProto.forEach) {
   ArrayProto.forEach = (func, that) -> {
-    for (var i = 0; i < @length; ++i) {
+    #foreach (i of @) {
       func.call(that, @[i], i, @);
     }
   };
@@ -165,7 +164,7 @@ ArrayProto.each = (func, from, to) -> {
 if (!ArrayProto.filter) {
   ArrayProto.filter = (func, that) -> {
     var result = [];
-    for (var i = 0, j = @length; i < j; ++i) {
+    #foreach (i of @) {
       if (func.call(that, @[i], i, @)) {
         result.push(@[i]);
       }
@@ -175,7 +174,7 @@ if (!ArrayProto.filter) {
 }
 if (!ArrayProto.every) {
   ArrayProto.every = (func, that) -> {
-    for (var i = 0, j = @length; i < j; ++i) {
+    #foreach (i of @) {
       if (!func.call(that, @[i], i, @)) {
         return false;
       }
@@ -185,7 +184,7 @@ if (!ArrayProto.every) {
 }
 if (!ArrayProto.some) {
   ArrayProto.some = (func, that) -> {
-    for (var i = 0, j = @length; i < j; ++i) {
+    #foreach (i of @) {
       if (func.call(that, @[i], i, @)) {
         return true;
       }
@@ -196,7 +195,7 @@ if (!ArrayProto.some) {
 if (!ArrayProto.map) {
   ArrayProto.map = (func, that) -> {
     var result = [];
-    for (var i = 0, j = @length; i < j; ++i) {
+    #foreach (i of @) {
       result.push(func.call(that, @[i], i, @));
     }
     return result;
@@ -263,7 +262,7 @@ FunctionProto.mixin = obj -> {
   proto.constructor = @;
   return @;
 };
-FunctionProto.extend = obj -> {
+FunctionProto.extend = FunctionProto.include = obj -> {
   var proto = @prototype;
   Object.extend(@, obj);
   @prototype = proto;
@@ -271,7 +270,7 @@ FunctionProto.extend = obj -> {
 };
 
 // RegExp
-var RegExp_specials = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\)/g;
+var RegExp_specials = #/(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\)/g;
 RegExp.escape = text -> text.replace(RegExp_specials, "\\$1");
 
 // String
@@ -279,15 +278,15 @@ String.is = obj -> typeof obj === "string";
 
 var StringProto = String.prototype;
 if (!StringProto.trim) {
-  var String_trim = /^\s+|\s+$/g;
+  var String_trim = #/^\s+|\s+$/g;
   StringProto.trim = () -> @replace(String_trim, "");
 }
 if (!StringProto.trimLeft) {
-  var String_trimLeft = /^\s+/g;
+  var String_trimLeft = #/^\s+/g;
   StringProto.trimLeft = () -> @replace(String_trimLeft, "");
 }
 if (!StringProto.trimRight) {
-  var String_trimRight = /\s+$/g;
+  var String_trimRight = #/\s+$/g;
   StringProto.trimRight = () -> @replace(String_trimRight, "");
 }
 

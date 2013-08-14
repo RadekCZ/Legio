@@ -71,14 +71,13 @@ Object.clone = function clone(source) {
   return source;
 };
 Object.extend = function extend(what, extension) {
-  var i;
   if (arguments.length > 2) {
-    for (i = 1; i < arguments.length; ++i) {
+    for (var i = 0; i < arguments.length; ++i) {
       extend(what, arguments[i]);
     }
   }
   else {
-    for (i in extension) if (Object.owns(extension, i)) {
+    for (var i in extension) if (Object.owns(extension, i)) {
       what[i] = extension[i];
     }
   }
@@ -167,7 +166,7 @@ ArrayProto.each = function (func, from, to) {
 if (!ArrayProto.filter) {
   ArrayProto.filter = function (func, that) {
     var result = [];
-    for (var i = 0, j = this.length; i < j; ++i) {
+    for (var i = 0; i < this.length; ++i) {
       if (func.call(that, this[i], i, this)) {
         result.push(this[i]);
       }
@@ -177,7 +176,7 @@ if (!ArrayProto.filter) {
 }
 if (!ArrayProto.every) {
   ArrayProto.every = function (func, that) {
-    for (var i = 0, j = this.length; i < j; ++i) {
+    for (var i = 0; i < this.length; ++i) {
       if (!func.call(that, this[i], i, this)) {
         return false;
       }
@@ -187,7 +186,7 @@ if (!ArrayProto.every) {
 }
 if (!ArrayProto.some) {
   ArrayProto.some = function (func, that) {
-    for (var i = 0, j = this.length; i < j; ++i) {
+    for (var i = 0; i < this.length; ++i) {
       if (func.call(that, this[i], i, this)) {
         return true;
       }
@@ -198,7 +197,7 @@ if (!ArrayProto.some) {
 if (!ArrayProto.map) {
   ArrayProto.map = function (func, that) {
     var result = [];
-    for (var i = 0, j = this.length; i < j; ++i) {
+    for (var i = 0; i < this.length; ++i) {
       result.push(func.call(that, this[i], i, this));
     }
     return result;
@@ -265,7 +264,7 @@ FunctionProto.mixin = function (obj) {
   proto.constructor = this;
   return this;
 };
-FunctionProto.extend = function (obj) {
+FunctionProto.extend = FunctionProto.include = function (obj) {
   var proto = this.prototype;
   Object.extend(this, obj);
   this.prototype = proto;

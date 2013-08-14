@@ -1,6 +1,6 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+#module Legio.construct (
+  Legio = "../std" = Legio
+)
 
 /**
  * Main function which generates a special constructor using the data argument
@@ -11,7 +11,7 @@ function definition(Legio) {
  *    mixins: Array
  *    members: Object
  */
-function construct(data) {
+construct(data) -> {
   var Fn = data.init, Parent = data.inherits, statics = data.statics, mixins = data.mixins, members = data.members;
   
   if (Parent) {
@@ -48,7 +48,7 @@ function construct(data) {
 }
 
 // This function is used to call the super constructor (in inherited constructs)
-function superInit() {
+superInit() -> {
   var sup = this.superConstructor,
       proto = sup.prototype;
   
@@ -60,7 +60,7 @@ function superInit() {
 }
 
 // This method calls a method of ther super construct
-function superMethod(name, args) {
+superMethod(name, args) -> {
   var proto = this.superConstructor.prototype;
   
   this.superConstructor = proto.superConstructor;
@@ -73,7 +73,7 @@ function superMethod(name, args) {
 }
 
 // This method is used for inheritance using Object.create for the prototype
-function inherits(Fn, Parent) {
+inherits(Fn, Parent) -> {
   var proto = Fn.prototype = Object.create(Parent.prototype);
   
   proto.superConstructor = Parent;
@@ -81,15 +81,4 @@ function inherits(Fn, Parent) {
   proto.superMethod = superMethod;
 }
 
-return construct;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.construct = definition(global.Legio);
-}
-})(this);
+#export construct;
