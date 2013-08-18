@@ -1,5 +1,5 @@
 #module Legio.URI (
-  Legio = "./std" = Legio
+  Legio = "../std" = Legio
 )
 
 var enc = encodeURI, dec = decodeURI, encC = encodeURIComponent, decC = decodeURIComponent;

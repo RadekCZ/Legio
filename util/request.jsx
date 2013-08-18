@@ -1,6 +1,6 @@
 #module Legio.Request (
-  Legio = "./std" = Legio,
-  Promise = "./async/promise" = Legio.Promise
+  Legio = "../std" = Legio,
+  Promise = "../async/promise" = Legio.Promise
 )
 
 getXHR(file, async, post) -> {

@@ -38,10 +38,10 @@ URI.stringify = URI.create;
 return URI;
 }
 if (typeof module === "object" && module.exports) {
-module.exports = definition(require("./std"));
+module.exports = definition(require("../std"));
 }
 else if (typeof define === "function" && define.amd) {
-define(["./std"], definition);
+define(["../std"], definition);
 }
 else {
 global.Legio.URI = definition(global.Legio);

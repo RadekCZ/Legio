@@ -1,6 +1,6 @@
 {
   "name": "legio",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A simple library for dealing with routine things.",
   "author": {
     "name": "Radomír Žemlička",
@@ -17,6 +17,5 @@
   "dependencies": {},
   "engines": {
     "node": "*"
-  },
-  "readme": "A simple library for dealing with routine things."
+  }
 }
