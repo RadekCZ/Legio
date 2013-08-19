@@ -2,14 +2,14 @@
 "use strict";
 function definition() {
 
-// Hlavní objekt frameworku
+// HlavnÃ­ objekt frameworku
 function Legio() { return Legio; };
 
-// Funkce pro ovìøení hodnoty na undefined i null
+// Funkce pro ovÄ›Å™enÃ­ hodnoty na undefined i null
 var nil = Legio.nil = function (obj) { return obj === undefined || obj === null; };
 Legio.or = function (val, elseVal) { return nil(val) ? elseVal : val; };
 
-// Rošíøení základní JS knihovny
+// RoÅ¡Ã­Å™enÃ­ zÃ¡kladnÃ­ JS knihovny
 // Object
 var ObjectProto = Object.prototype, hasOwn = ObjectProto.hasOwnProperty, objToStr = ObjectProto.toString;
 
@@ -70,18 +70,18 @@ Object.clone = function clone(source) {
   }
   return source;
 };
-Object.extend = function extend(what, extension) {
+Object.extend = function extend(obj, extension) {
   if (arguments.length > 2) {
     for (var i = 0; i < arguments.length; ++i) {
-      extend(what, arguments[i]);
+      extend(obj, arguments[i]);
     }
   }
   else {
     for (var i in extension) if (Object.owns(extension, i)) {
-      what[i] = extension[i];
+      obj[i] = extension[i];
     }
   }
-  return what;
+  return obj;
 };
 Object.merge = function () {
   var out = {};
@@ -362,7 +362,7 @@ NumberProto.limit = function (from, to) {
 NumberProto.toInt = function () { return this | 0; };
 NumberProto.toFloat = function () { return this; };
 
-// Matematické funkce do prototypu èísla
+// MatematickÃ© funkce do prototypu ÄÃ­sla
 NumberProto.mod = function (n) { return ((this % n) + n) % n; };
 NumberProto.abs = function () { return Math.abs(this); };
 NumberProto.round = function (dec) {
