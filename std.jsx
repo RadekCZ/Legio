@@ -290,16 +290,7 @@ if (!StringProto.trimRight) {
   StringProto.trimRight = () -> @replace(String_trimRight, "");
 }
 
-StringProto.replaceAll = (from, to) -> @replace(new RegExp(RegExp.escape(from), "g"), to);
-
-StringProto.replaceWhile = (from, to) -> {
-  var str = @, ind = 0, fLen = from.length, tLen = to.length;
-  while ((ind = str.indexOf(from, ind)) !== -1) {
-    str = str.slice(0, ind) + to + str.slice(ind + fLen);
-    ind += tLen;
-  }
-  return str;
-};
+StringProto.replaceAll = (from, to) -> @split(from).join(to);
 
 var pInt = parseInt, pFloat = parseFloat;
 StringProto.toInt = radix -> pInt(@, radix || 10);

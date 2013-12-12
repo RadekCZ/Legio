@@ -292,16 +292,7 @@ if (!StringProto.trimRight) {
   StringProto.trimRight = function () { return this.replace(String_trimRight, ""); };
 }
 
-StringProto.replaceAll = function (from, to) { return this.replace(new RegExp(RegExp.escape(from), "g"), to); };
-
-StringProto.replaceWhile = function (from, to) {
-  var str = this, ind = 0, fLen = from.length, tLen = to.length;
-  while ((ind = str.indexOf(from, ind)) !== -1) {
-    str = str.slice(0, ind) + to + str.slice(ind + fLen);
-    ind += tLen;
-  }
-  return str;
-};
+StringProto.replaceAll = function (from, to) { return this.split(from).join(to); };
 
 var pInt = parseInt, pFloat = parseFloat;
 StringProto.toInt = function (radix) { return pInt(this, radix || 10); };
