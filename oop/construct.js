@@ -1,6 +1,5 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+var
+Legio = require("../std");
 
 /**
  * Main function which generates a special constructor using the data argument
@@ -81,15 +80,4 @@ function inherits(Fn, Parent) {
   proto.superMethod = superMethod;
 }
 
-return construct;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.construct = definition(global.Legio);
-}
-})(this);
+module.exports = construct;

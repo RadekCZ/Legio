@@ -1,6 +1,5 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+var
+Legio = require("../std");
 
 var enc = encodeURI, dec = decodeURI, encC = encodeURIComponent, decC = decodeURIComponent;
 
@@ -35,15 +34,4 @@ var URI = {
 
 URI.stringify = URI.create;
 
-return URI;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.URI = definition(global.Legio);
-}
-})(this);
+module.exports = URI;

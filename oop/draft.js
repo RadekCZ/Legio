@@ -1,6 +1,5 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+var
+Legio = require("../std");
 
 // Function which simulates an interface
 function draft(inherits, data) {
@@ -46,15 +45,4 @@ function checkObject(obj) {
   return true;
 }
 
-return draft;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.draft = definition(global.Legio);
-}
-})(this);
+module.exports = draft;

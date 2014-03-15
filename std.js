@@ -1,7 +1,3 @@
-(function (global, undefined) {
-"use strict";
-function definition() {
-
 // Hlavní objekt frameworku
 function Legio() { return Legio; };
 
@@ -379,15 +375,4 @@ if (!Date.now) {
   Date.now = function () { return +(new Date()); };
 }
 
-return Legio;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition();
-}
-else if (typeof define === "function" && define.amd) {
-define([], definition);
-}
-else {
-global.Legio = definition();
-}
-})(this);
+module.exports = Legio;

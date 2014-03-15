@@ -1,7 +1,3 @@
-(function (global, undefined) {
-"use strict";
-function definition() {
-
 var Key = {
   BACKSPACE: 8,
   TAB: 9,
@@ -74,7 +70,7 @@ var Key = {
   NUM_7: 103,
   NUM_8: 104,
   NUM_9: 105,
-  NUM_STAR: 106,
+  NUM_ASTERISK: 106,
   NUM_PLUS: 107,
   NUM_MINUS: 109,
   NUM_DOT: 110,
@@ -95,15 +91,4 @@ var Key = {
   F12: 123
 };
 
-return Key;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition();
-}
-else if (typeof define === "function" && define.amd) {
-define([], definition);
-}
-else {
-global.Legio.Key = definition();
-}
-})(this);
+module.exports = Key;

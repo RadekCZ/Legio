@@ -1,6 +1,6 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio, Promise) {
+var
+Legio = require("../std"),
+Promise = require("../async/promise");
 
 function getXHR(file, async, post) {
   var xhr;
@@ -123,15 +123,4 @@ if (global.document) {
   };
 }
 
-return Request;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"), require("../async/promise"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std", "../async/promise"], definition);
-}
-else {
-global.Legio.Request = definition(global.Legio, global.Legio.Promise);
-}
-})(this);
+module.exports = Request;
