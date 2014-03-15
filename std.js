@@ -103,7 +103,9 @@ Array.is = Array.isArray;
 var ArrayProto = Array.prototype,
     arraySlice = ArrayProto.slice;
 
-Array.convert = Array.from = function (obj, from, to) { if (from === undefined) { from = 0; } 
+Array.convert = Array.from = function (obj, from, to) {
+  from === undefined && (from = 0);
+  
   if (obj) {
     if (!to) { to = obj.length; }
     
@@ -232,18 +234,15 @@ var FunctionProto = Function.prototype;
 
 if (!FunctionProto.bind) {
   FunctionProto.bind = function (that) {
+    that === undefined && (that = global);
     var func = this;
-    
-    if (that === undefined) {
-      that = global;
-    }
     
     if (arguments.length <= 1) {
       return function () { return func.apply(that, arguments); };
     }
     
     var args = Array.from(arguments, 1);
-    return function () { return func.apply(that, args.concat(Array.from(arguments))); };
+    return function () { return func.apply(that, args.concat(Array.from(arguments))); }
   };
 }
 
