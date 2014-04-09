@@ -1,4 +1,4 @@
 Legio
 =====
 
-A simple JavaScript library for handling routine activities.
+A simple JavaScript library for handling routine tasks.

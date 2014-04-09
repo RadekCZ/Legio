@@ -1,7 +1,7 @@
 {
   "name": "legio",
-  "version": "0.1.5",
-  "description": "A simple library for dealing with routine things.",
+  "version": "0.1.7",
+  "description": "A simple JavaScript library for handling routine tasks.",
   "author": {
     "name": "Radomír Žemlička",
     "email": "info@razem.cz",

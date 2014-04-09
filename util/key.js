@@ -1,3 +1,5 @@
+'use strict';
+
 var Key = {
   BACKSPACE: 8,
   TAB: 9,
@@ -13,15 +15,17 @@ var Key = {
   PAGE_DOWN: 34,
   END: 35,
   HOME: 36,
-  
+
   ARROW_LEFT: 37,
   ARROW_UP: 38,
   ARROW_RIGHT: 39,
   ARROW_DOWN: 40,
-  
+
   INSERT: 45,
   DELETE: 46,
-  
+
+  CONSOLE: 192,
+
   KEY_0: 48,
   KEY_1: 49,
   KEY_2: 50,
@@ -32,7 +36,7 @@ var Key = {
   KEY_7: 55,
   KEY_8: 56,
   KEY_9: 57,
-  
+
   A: 65,
   B: 66,
   C: 67,
@@ -59,7 +63,7 @@ var Key = {
   X: 88,
   Y: 89,
   Z: 90,
-  
+
   NUM_0: 96,
   NUM_1: 97,
   NUM_2: 98,
@@ -76,7 +80,7 @@ var Key = {
   NUM_DOT: 110,
   NUM_SLASH: 111,
   NUM_LOCK: 144,
-  
+
   F1: 112,
   F2: 113,
   F3: 114,

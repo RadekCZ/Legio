@@ -1,8 +1,8 @@
-(function (global, undefined) {
-"use strict";
-function definition(Legio) {
+'use strict';
+var
+Legio = require("../std");
 
-// Main function which generates a special constructor
+// The main function which generates a special constructor
 function struct() {
   var keys = arguments;
   return function () {
@@ -10,22 +10,11 @@ function struct() {
   };
 }
 
-// Function that fills properties by arguments
+// A function that fills properties by arguments
 function fill(obj, keys, values) {
   for (var i = 0; i < keys.length; ++i) {
     obj[keys[i]] = values[i];
   }
 }
 
-return struct;
-}
-if (typeof module === "object" && module.exports) {
-module.exports = definition(require("../std"));
-}
-else if (typeof define === "function" && define.amd) {
-define(["../std"], definition);
-}
-else {
-global.Legio.struct = definition(global.Legio);
-}
-})(this);
+module.exports = struct;

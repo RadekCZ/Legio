@@ -1,7 +1,8 @@
+'use strict';
 var
 Legio = require("../std"),
 construct = require("../oop/construct");
-    
+
 var Interval = construct({
   init: function (func, time, wrap) {
     var self = this;
@@ -15,10 +16,12 @@ var Interval = construct({
   },
   members: {
     activate: function (immediately, time) {
+      time === undefined && (time = this._time);
+
       if (immediately) {
         global.setTimeout(this._func, 0);
       }
-      this._id = global.setInterval(this._func, Legio.or(time, this._time));
+      this._id = global.setInterval(this._func, time);
     },
     suspend: function () {
       global.clearInterval(this._id);

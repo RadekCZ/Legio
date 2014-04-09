@@ -1,3 +1,4 @@
+'use strict';
 var
 construct = require("../oop/construct");
 
@@ -102,17 +103,18 @@ var Promise = construct({
   },
   statics: {
     when: function (/*Promise[]*/ list) {
-      var wrapper = new this(list),
-          len = list.length,
+      var
+      wrapper = new Promise(list),
+      len = list.length,
 
-          reject = wrapper.bindReject(),
+      reject = wrapper.bindReject(),
 
-          count = len,
-          resolvePart = function () {
-            if (wrapper.pending && --count === 0) {
-              wrapper.resolve();
-            }
-          };
+      count = len,
+      resolvePart = function () {
+        if (wrapper.pending && --count === 0) {
+          wrapper.resolve();
+        }
+      };
 
       for (var i = 0; i < len; ++i) {
         list[i].then(resolvePart, reject);

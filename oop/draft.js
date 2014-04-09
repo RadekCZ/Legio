@@ -1,7 +1,8 @@
+'use strict';
 var
 Legio = require("../std");
 
-// Function which simulates an interface
+// A function which simulates an interface
 function draft(inherits, data) {
   if (!data) {
     data = inherits;
@@ -9,19 +10,19 @@ function draft(inherits, data) {
   else {
     data = Object.merge(inherits._interface, data);
   }
-  
+
   var check = checkObject.bind(data);
   check._interface = data;
-  
+
   return check;
 }
 
 function checkObject(obj) {
   var data = this;
-  
+
   for (var i in data) if (Object.owns(data, i)) {
     var T = data[i], val = obj[i];
-    
+
     if (T === null) {
       if (val === undefined) {
         return false;
@@ -41,7 +42,7 @@ function checkObject(obj) {
       return false;
     }
   }
-  
+
   return true;
 }
 

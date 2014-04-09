@@ -1,12 +1,14 @@
-// Hlavní objekt frameworku
-function Legio() { return Legio; };
+'use strict';
 
-// Funkce pro ověření hodnoty na undefined i null
+// The main object
+function Legio() { return Legio; }
+
+// Functions for handling null & undefined values together
 var nil = Legio.nil = function (obj) { return obj === undefined || obj === null; };
 Legio.or = function (val, elseVal) { return nil(val) ? elseVal : val; };
 
-// Rošíření základní JS knihovny
-// Object
+// Extensions of the base library
+// @EXT Object
 var ObjectProto = Object.prototype, hasOwn = ObjectProto.hasOwnProperty, objToStr = ObjectProto.toString;
 
 if (!Object.is) {
@@ -26,7 +28,7 @@ Object.is = function (obj) {
   if (arguments.length === 1) {
     return typeof obj === "object" && obj !== null;
   }
-  
+
   return ObjectIs.apply(Object, arguments);
 };
 
@@ -34,9 +36,9 @@ Object.owns = function (obj, prop) { return hasOwn.call(obj, prop); };
 
 if (!Object.create) {
   Object.create = function (obj) {
-    var emptyFn = function () { };
-    emptyFn.prototype = obj;
-    return new emptyFn();
+    var Empty = function () {};
+    Empty.prototype = obj;
+    return new Empty();
   };
 }
 if (!Object.keys) {
@@ -94,21 +96,22 @@ Object.forEach = Object.each = function (obj, func) {
   }
 };
 
-// Array
+// @EXT Array
 if (!Array.isArray) {
   Array.isArray = function (array) { return array instanceof Array || objToStr.call(array) === "[object Array]"; };
 }
 Array.is = Array.isArray;
 
-var ArrayProto = Array.prototype,
-    arraySlice = ArrayProto.slice;
+var
+ArrayProto = Array.prototype,
+arraySlice = ArrayProto.slice;
 
 Array.convert = Array.from = function (obj, from, to) {
   from === undefined && (from = 0);
-  
+
   if (obj) {
     if (!to) { to = obj.length; }
-    
+
     try {
       return arraySlice.call(obj, from, to);
     }
@@ -125,7 +128,9 @@ Array.convert = Array.from = function (obj, from, to) {
 
 if (!ArrayProto.indexOf) {
   ArrayProto.indexOf = function (value, from) {
-    for (var i = from || 0, j = this.length; i < j; ++i) {
+    from === undefined && (from = 0);
+
+    for (var i = from, j = this.length; i < j; ++i) {
       if (this[i] === value) {
         return i;
       }
@@ -135,9 +140,8 @@ if (!ArrayProto.indexOf) {
 }
 if (!ArrayProto.lastIndexOf) {
   ArrayProto.lastIndexOf = function (value, from) {
-    if (nil(from)) {
-      from = this.length - 1;
-    }
+    from === undefined && (from = this.length - 1);
+
     for (var i = from; i >= 0; i--) {
       if (this[i] === value) {
         return i;
@@ -154,7 +158,10 @@ if (!ArrayProto.forEach) {
   };
 }
 ArrayProto.each = function (func, from, to) {
-  for (var i = (from || 0); i < (to || this.length); ++i) {
+  from === undefined && (from = 0);
+  to === undefined && (to = this.length);
+
+  for (var i = from; i < to; ++i) {
     if (func.call(this, this[i], i, this)) {
       break;
     }
@@ -204,9 +211,8 @@ if (!ArrayProto.map) {
 if (!ArrayProto.reduce) {
   ArrayProto.reduce = function (func, current) {
     var i = 0;
-    if (nil(current)) {
-      current = this[i++];
-    }
+    current === undefined && (current = this[i++]);
+
     for (; i < this.length; ++i) {
       current = func(current, this[i], i, this);
     }
@@ -216,41 +222,48 @@ if (!ArrayProto.reduce) {
 if (!ArrayProto.reduceRight) {
   ArrayProto.reduceRight = function (func, current) {
     var i = this.length - 1;
-    if (nil(current)) {
-      current = this[i--];
-    }
+    current === undefined && (current = this[i--]);
+
     for (; i >= 0; --i) {
       current = func(current, this[i], i, this);
     }
     return current;
   };
 }
-ArrayProto.add = function (array) { return this.push.apply(this, array); };
+ArrayProto.add = function (array) {
+  this.push.apply(this, array);
 
-// Function
+  return this;
+};
+
+// @EXT Function
 Function.is = function (obj) { return obj instanceof Function || typeof obj === "function"; };
 
 var FunctionProto = Function.prototype;
 
 if (!FunctionProto.bind) {
   FunctionProto.bind = function (that) {
-    that === undefined && (that = global);
-    var func = this;
-    
-    if (arguments.length <= 1) {
-      return function () { return func.apply(that, arguments); };
+    if (!Function.is(this)) {
+      throw new TypeError("Can't bind anything except funcitons!");
     }
-    
+
+    var
+    func = this,
+    Empty = function () {};
+
+    Empty.prototype = func.prototype;
+
+    if (arguments.length <= 1) {
+      return function () { return func.apply(this instanceof Empty && that ? this : that, arguments); };
+    }
+
     var args = Array.from(arguments, 1);
-    return function () { return func.apply(that, args.concat(Array.from(arguments))); }
+    return function () { return func.apply(this instanceof Empty && that ? this : that, args.concat(Array.from(arguments))); }
   };
 }
 
 FunctionProto.bindList = function (that, args) {
-  var finalArgs = [that];
-  finalArgs.add(args);
-  
-  return this.bind.apply(this, finalArgs);
+  return this.bind.apply(this, [that].add(args));
 };
 
 FunctionProto.mixin = function (obj) {
@@ -266,14 +279,15 @@ FunctionProto.extend = FunctionProto.include = function (obj) {
   return this;
 };
 
-// RegExp
+// @EXT RegExp
 var RegExp_specials = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\)/g;
 RegExp.escape = function (text) { return text.replace(RegExp_specials, "\\$1"); };
 
-// String
+// @EXT String
 String.is = function (obj) { return typeof obj === "string"; };
 
 var StringProto = String.prototype;
+
 if (!StringProto.trim) {
   var String_trim = /^\s+|\s+$/g;
   StringProto.trim = function () { return this.replace(String_trim, ""); };
@@ -307,24 +321,30 @@ if (!StringProto.contains) {
   StringProto.contains = function (str, index) { return this.indexOf(str, index) !== -1; };
 }
 if (!StringProto.startsWith) {
-  StringProto.startsWith = function (str, index) { if (index === undefined) { index = 0; }  return this.indexOf(str, index) === index; };
+  StringProto.startsWith = function (str, index) {
+    index === undefined && (index = 0);
+
+    return this.indexOf(str, index) === index;
+  };
 }
 if (!StringProto.endsWith) {
-  StringProto.endsWith = function (str, index) { if (index === undefined) { index = this.length; } 
+  StringProto.endsWith = function (str, index) {
+    index === undefined && (index = this.length);
+
     index -= str.length;
-    
+
     return this.lastIndexOf(str, index) === index;
   };
 }
 
-// Math
+// @EXT Math
 Math.rand = function (from, to) { return from + Math.floor(Math.random() * (to - from + 1)); };
 
 if (!Math.sign) {
   Math.sign = function (num) { return num === 0 ? 0 : (num > 0 ? 1 : -1); };
 }
 
-// Number
+// @EXT Number
 Number.is = function (obj) { return typeof obj === "number"; };
 Number.parseInt = pInt;
 Number.parse = pFloat;
@@ -336,19 +356,12 @@ Number.isFinite = isFinite;
 Number.isNumeric = function (num) { return (Number.is(num) || (String.is(num) && num !== "")) && Number.isFinite(num); };
 
 var NumberProto = Number.prototype;
-NumberProto.limit = function (from, to) {
-  if (this < from) {
-    return from;
-  }
-  if (this > to) {
-    return to;
-  }
-  return this;
-};
-NumberProto.toInt = function () { return this | 0; };
+
+NumberProto.limit = function (from, to) { return Math.min(Math.max(this, from), to); };
+NumberProto.toInt = function () { return Math[number < 0 ? "ceil" : "floor"](number); };
 NumberProto.toFloat = function () { return this; };
 
-// Matematické funkce do prototypu čísla
+// Math functions added to the Number's prototype
 NumberProto.mod = function (n) { return ((this % n) + n) % n; };
 NumberProto.abs = function () { return Math.abs(this); };
 NumberProto.round = function (dec) {
@@ -360,16 +373,20 @@ NumberProto.round = function (dec) {
 };
 NumberProto.floor = function () { return Math.floor(this); };
 NumberProto.ceil = function () { return Math.ceil(this); };
-NumberProto.pow = function (exp) { return Math.pow(this, Number.is(exp) ? exp : 2); };
+NumberProto.pow = function (exp) {
+  exp === undefined && (exp = 2);
+
+  return Math.pow(this, exp);
+};
 NumberProto.sqrt = function () { return Math.sqrt(this); };
 NumberProto.log = function (base) { return base ? Math.log(this) / Math.log(base) : Math.log(this); };
 NumberProto.toRad = function () { return this * Math.PI / 180; };
 NumberProto.toDeg = function () { return this * 180 / Math.PI; };
 
-// Boolean
+// @EXT Boolean
 Boolean.is = function (obj) { return typeof obj === "boolean"; };
 
-// Date
+// @EXT Date
 if (!Date.now) {
   Date.now = function () { return +(new Date()); };
 }

@@ -1,7 +1,8 @@
+'use strict';
 var
 construct = require("../oop/construct"),
 Promise = require("./promise");
-    
+
 var ChainPromise = construct({
   inherits: Promise,
 
