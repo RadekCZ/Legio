@@ -358,7 +358,7 @@ Number.isNumeric = function (num) { return (Number.is(num) || (String.is(num) &&
 var NumberProto = Number.prototype;
 
 NumberProto.limit = function (from, to) { return Math.min(Math.max(this, from), to); };
-NumberProto.toInt = function () { return Math[number < 0 ? "ceil" : "floor"](number); };
+NumberProto.toInt = function () { return Math[this < 0 ? "ceil" : "floor"](this); };
 NumberProto.toFloat = function () { return this; };
 
 // Math functions added to the Number's prototype
