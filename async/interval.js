@@ -14,7 +14,8 @@ var Interval = construct({
 
     this._time = time;
   },
-  members: {
+
+  proto: {
     activate: function (immediately, time) {
       time === undefined && (time = this._time);
 

@@ -6,17 +6,22 @@ Legio = require("../std");
  * The main function which generates a special constructor using the data argument
  * data: Object
  *    init: Function
- *    inherits: Function | [construct] | [struct]
- *    statics: Object
- *    mixins: Array
- *    members: Object
+ *    inherit | inherits: Function | [construct] | [struct]
+ *    own | statics | owns: Object
+ *    mixin | mixins: Array
+ *    proto | members: Object
  */
 function construct(data) {
-  var Fn = data.init, Parent = data.inherits, statics = data.statics, mixins = data.mixins, members = data.members;
+  var
+  Con = data.init,
+  Super = data.inherit || data.inherits,
+  statics = data.own || data.statics || data.owns,
+  mixins = data.mixin || data.mixins,
+  proto = data.proto || data.members;
 
-  if (Parent) {
-    inherits(Fn, Parent);
-    Fn.include(Parent);
+  if (Super) {
+    inherits(Con, Super);
+    Con.include(Super);
   }
   // else if (Parent === null) {
     // Fn.prototype = Object.create(null);
@@ -25,60 +30,61 @@ function construct(data) {
 
   if (mixins) {
     for (var i = 0, j = mixins.length; i < j; ++i) {
-      Fn.mixin(mixins[i]);
+      Con.mixin(mixins[i]);
     }
   }
 
-  if (members) {
-    if (Parent || mixins) {
-      Fn.mixin(members);
+  if (proto) {
+    if (Super || mixins) {
+      Con.mixin(proto);
     }
     else {
-      Fn.prototype = members;
+      Con.prototype = proto;
     }
   }
 
   if (statics) {
-    Fn.include(statics);
+    Con.include(statics);
   }
 
-  Fn.prototype.constructor = Fn;
+  Con.prototype.constructor = Con;
 
-  return Fn;
+  return Con;
 }
 
 // This function is used to call the super constructor (in inherited constructs)
 function superInit() {
-  var sup = this.superConstructor,
-      proto = sup.prototype;
+  var
+  sup = this.Super,
+  proto = sup.prototype;
 
-  this.superConstructor = proto.superConstructor;
+  this.Super = proto.Super;
 
   sup.apply(this, arguments);
 
-  delete this.superConstructor;
+  delete this.Super;
 }
 
 // This method calls a method of the super construct
-function superMethod(name, args) {
-  var proto = this.superConstructor.prototype;
+function superCall(name, args) {
+  var proto = this.Super.prototype;
 
-  this.superConstructor = proto.superConstructor;
+  this.Super = proto.Super;
 
   var res = proto[name].apply(this, args);
 
-  delete this.superConstructor;
+  delete this.Super;
 
   return res;
 }
 
 // This method is used for the inheritance using the Object.create for the prototype
-function inherits(Fn, Parent) {
-  var proto = Fn.prototype = Object.create(Parent.prototype);
+function inherits(Con, Super) {
+  var proto = Con.prototype = Object.create(Super.prototype);
 
-  proto.superConstructor = Parent;
+  proto.Super = Super;
   proto.superInit = superInit;
-  proto.superMethod = superMethod;
+  proto.superCall = proto.superMethod = superCall;
 }
 
 module.exports = construct;

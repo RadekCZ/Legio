@@ -9,7 +9,8 @@ var Timeout = construct({
     this._func = wrap === false ? func : func.bind(this);
     this._time = time;
   },
-  members: {
+
+  proto: {
     start: function (time) {
       time === undefined && (time = this.time);
 
@@ -19,7 +20,8 @@ var Timeout = construct({
       global.clearTimeout(this._id);
     }
   },
-  statics: {
+
+  own: {
     start: function (time, that) {
       var
       prom = new Promise(that),

@@ -3,7 +3,7 @@ var
 Legio = require("../std");
 
 // A function which simulates an interface
-function draft(inherits, data) {
+function type(inherits, data) {
   if (!data) {
     data = inherits;
   }
@@ -46,4 +46,4 @@ function checkObject(obj) {
   return true;
 }
 
-module.exports = draft;
+module.exports = type;

@@ -1,16 +1,18 @@
 'use strict';
 var
+Legio = require("../std"),
 construct = require("../oop/construct"),
 Promise = require("./promise");
 
 var ChainPromise = construct({
-  inherits: Promise,
+  inherit: Promise,
 
   init: function (that) {
     this.superInit(that);
   },
-  members: {
-    then: function (/*Function*/ onResolve, /*Function*/ onReject, /*Function*/ onNotify) {
+
+  proto: {
+    then: function (onResolve, onReject, onNotify) {
       var prom = new ChainPromise(this._that);
 
       if (Function.is(onResolve)) {
@@ -20,7 +22,7 @@ var ChainPromise = construct({
         onReject = onReject.bind(this._that, prom);
       }
 
-      this.superMethod("then", [onResolve, onReject, onNotify]);
+      this.superCall("then", [onResolve, onReject, onNotify]);
 
       return prom;
     }

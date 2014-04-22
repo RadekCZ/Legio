@@ -281,7 +281,7 @@ FunctionProto.extend = FunctionProto.include = function (obj) {
 
 // @EXT RegExp
 var RegExp_specials = /(\/|\.|\*|\+|\?|\||\(|\)|\[|\]|\{|\}|\\)/g;
-RegExp.escape = function (text) { return text.replace(RegExp_specials, "\\$1"); };
+RegExp.escape = function (str) { return str.replace(RegExp_specials, "\\$1"); };
 
 // @EXT String
 String.is = function (obj) { return typeof obj === "string"; };

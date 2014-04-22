@@ -1,5 +1,6 @@
 'use strict';
 var
+Legio = require("../std"),
 construct = require("../oop/construct");
 
 var Promise = construct({
@@ -10,12 +11,13 @@ var Promise = construct({
     this._onReject = [];
     this._onNotify = [];
   },
-  members: {
+
+  proto: {
     pending: true,
     resolved: false,
     rejected: false,
 
-    then: function (/*Function*/ onResolve, /*Function*/ onReject, /*Function*/ onNotify) {
+    then: function (onResolve, onReject, onNotify) {
       if (Function.is(onResolve)) {
         if (this.pending) {
           this._onResolve.push(onResolve);
@@ -101,8 +103,9 @@ var Promise = construct({
       delete this.onReject;
     }
   },
-  statics: {
-    when: function (/*Promise[]*/ list) {
+
+  own: {
+    when: function (list) {
       var
       wrapper = new Promise(list),
       len = list.length,
