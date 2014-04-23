@@ -2,7 +2,12 @@
 
 A simple JavaScript library for handling routine tasks.
 
-## legio/std:
+**Installation:**
+```
+npm install legio
+```
+
+## legio/std
 ```javascript
 Legio
   nil(obj) -> Boolean
@@ -14,6 +19,7 @@ Object
   owns(obj, key) -> Boolean
   create(obj) -> Object
   keys(obj) -> Array
+  ownKeys|getOwnPropertyNames(obj) -> Array
   isEmpty|empty(obj) -> Boolean
   clone(obj) -> Object
   extend(obj, ext) -> obj
@@ -72,6 +78,9 @@ Number
   isNaN
   isFinite
   isNumeric(obj) -> Boolean
+  global
+    isNaN
+    isFinite
   prototype
     limit(from, to) -> Number
     toInt() -> Number
@@ -140,7 +149,7 @@ var B = construct({
 ```
 
 ## legio/oop/type
-```
+```javascript
 var
 A = type({
   b: String,
@@ -160,12 +169,8 @@ b = {
   a: "error",
   b: "hello",
   c: 42
-},
-c = {
-  b: "hello",
-  c: 42
 };
 
-console.log(A(a), A(b), A(c)); // true, true, true
-console.log(B(a), B(b), B(c)); // true, false, false
+console.log(A(a), A(b)); // true, true
+console.log(B(a), B(b)); // true, false
 ```

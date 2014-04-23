@@ -15,7 +15,7 @@ function construct(data) {
   var
   Con = data.init,
   Super = data.inherit || data.inherits,
-  statics = data.own || data.statics || data.owns,
+  own = data.own || data.statics || data.owns,
   mixins = data.mixin || data.mixins,
   proto = data.proto || data.members;
 
@@ -43,8 +43,8 @@ function construct(data) {
     }
   }
 
-  if (statics) {
-    Con.include(statics);
+  if (own) {
+    Con.include(own);
   }
 
   Con.prototype.constructor = Con;

@@ -44,12 +44,24 @@ if (!Object.create) {
 if (!Object.keys) {
   Object.keys = function (obj) {
     var result = [];
+    for (var i in obj) {
+      result.push(i);
+    }
+    return result;
+  };
+}
+
+if (!Object.getOwnPropertyNames) {
+  Object.getOwnPropertyNames = function (obj) {
+    var result = [];
     for (var i in obj) if (Object.owns(obj, i)) {
       result.push(i);
     }
     return result;
   };
 }
+Object.onwKeys = Object.getOwnPropertyNames;
+
 Object.isEmpty = Object.empty = function (obj) {
   if (!nil(obj)) {
     for (var prop in obj) if (Object.owns(obj, prop)) {
@@ -349,11 +361,32 @@ Number.is = function (obj) { return typeof obj === "number"; };
 Number.parseInt = pInt;
 Number.parse = pFloat;
 
+Number.Infinity = Infinity;
+
+var isFin = isFinite;
+Number.global = {
+  isNaN: isNaN,
+  isFinite: isFin
+};
+
 if (!Number.isNaN) {
   Number.isNaN = function (val) { return val !== val; };
 }
-Number.isFinite = isFinite;
-Number.isNumeric = function (num) { return (Number.is(num) || (String.is(num) && num !== "")) && Number.isFinite(num); };
+if (!Number.isFinite) {
+  Number.isFinite = function (val) {
+    return Number.is(val) && isFin(val);
+  };
+}
+
+Number.isNumeric = function (num) {
+  if (Number.is(num)) {
+    return Number.isFinite(num);
+  }
+  else if (String.is(num) && num !== "") {
+    return Number.isFinite(Number.parse(num));
+  }
+  return false;
+};
 
 var NumberProto = Number.prototype;
 
