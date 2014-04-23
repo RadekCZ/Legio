@@ -148,6 +148,13 @@ var B = construct({
 });
 ```
 
+## legio/oop/struct
+```javascript
+var Point = struct("x", "y", "z");
+
+var p = new Point(1, 2, 3); // p.x = 1; p.y = 2; p.z = 3;
+```
+
 ## legio/oop/type
 ```javascript
 var
@@ -173,4 +180,54 @@ b = {
 
 console.log(A(a), A(b)); // true, true
 console.log(B(a), B(b)); // true, false
+```
+
+## legio/async
+```javascript
+Promise(that)
+  when(list: Promise[]) -> Promise
+  prototype
+    pending: Boolean
+    resolved: Boolean
+    rejected: Boolean
+    then(onResolve, onReject, onNotify) -> this
+    resolve(...) -> Boolean
+    reject(...) -> Boolean
+    notify(...) -> Boolean
+    bindResolve(...) -> Function
+    bindReject(...) -> Function
+    bindNotify(...) -> Function
+
+ChainPromise : Promise
+  prototype
+    then(onResolve, onReject, onNotify) -> Promise
+
+Interval(fn, time, wrap: Boolean)
+  prototype
+    activate(immediately: Boolean, time)
+    suspend()
+
+Timeout(fn, time, wrap: Boolean)
+  start(time, that) -> Promise
+  prototype
+    start(time)
+    cancel()
+```
+
+## legio/util
+```javascript
+Key [enum]
+
+Request
+  getXHR(file, async, post) -> XMLHttpRequest
+  file(file, cfg: { async: Boolean, callback: Function, get: String, post: String }) -> Promise | XMLHttpRequest
+  script(file, callback) -> Promise | HTMLScriptElement
+
+URI
+  encode(str) -> String
+  decode(str) -> String
+  encodeComponent(str) -> String
+  decodeComponent(str) -> String
+  create|stringify(obj) -> String
+  parse(str) -> Object
 ```

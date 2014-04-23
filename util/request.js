@@ -46,7 +46,9 @@ function onXHRIsDone() {
 var Request = {
   getXHR: getXHR,
 
-  file: function (file, cfg) { if (cfg === undefined) { cfg = {}; }
+  file: function (file, cfg) {
+    cfg === undefined && (cfg = {});
+
     if (cfg.get) {
       file += "?" + cfg.get;
     }
