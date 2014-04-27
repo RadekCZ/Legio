@@ -16,8 +16,8 @@ if (!Object.is) {
     if (a === 0 && b === 0) {
       return 1 / a === 1 / b;
     }
-    if (a !== a && b !== b) {
-      return true;
+    if (a !== a) {
+      return b !== b;
     }
     return a === b;
   };
@@ -26,7 +26,7 @@ if (!Object.is) {
 var ObjectIs = Object.is;
 Object.is = function (obj) {
   if (arguments.length === 1) {
-    return typeof obj === "object" && obj !== null;
+    return typeof obj === "object" && obj !== null && !Array.is(obj);
   }
 
   return ObjectIs.apply(Object, arguments);
@@ -44,23 +44,12 @@ if (!Object.create) {
 if (!Object.keys) {
   Object.keys = function (obj) {
     var result = [];
-    for (var i in obj) {
-      result.push(i);
-    }
-    return result;
-  };
-}
-
-if (!Object.getOwnPropertyNames) {
-  Object.getOwnPropertyNames = function (obj) {
-    var result = [];
     for (var i in obj) if (Object.owns(obj, i)) {
       result.push(i);
     }
     return result;
   };
 }
-Object.onwKeys = Object.getOwnPropertyNames;
 
 Object.isEmpty = Object.empty = function (obj) {
   if (!nil(obj)) {
