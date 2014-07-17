@@ -7,7 +7,31 @@ A simple JavaScript library for handling routine tasks.
 npm install legio
 ```
 
-## legio/std
+**Compatible with:**
+- Node.js
+- Browserify
+
+**Modules:**
+- legio
+  - async
+    - task
+    - promise
+    - interval
+    - timeout
+  - oop
+    - type
+    - construct
+    - struct
+  - util
+    - key
+    - request
+    - uri
+
+**TODO:**
+- The async/await syntax using generators
+- Extensions of the core library (strings and numbers mostly)
+
+## legio
 ```javascript
 Legio
   nil(obj) -> Boolean
@@ -15,20 +39,19 @@ Legio
 
 Object
   is(obj) -> Boolean
-  is(obj1, obj2) -> Boolean
+  is(val1, val2) -> Boolean
   owns(obj, key) -> Boolean
-  create(obj) -> Object
+  create(proto) -> Object
   keys(obj) -> Array
-  ownKeys|getOwnPropertyNames(obj) -> Array
-  isEmpty|empty(obj) -> Boolean
-  clone(obj) -> Object
-  extend(obj, ext) -> obj
+  empty(obj) -> Boolean
+  clone(obj) -> Object // Deep cloning
+  assign(obj, ext) -> obj
   merge(objs...) -> Object
-  forEach|each(obj, fn)
+  each(obj, fn)
 
 Array
   is(obj) -> Boolean
-  convert|from(obj, fromIndex, toIndex) -> Array
+  from(obj, fromIndex, toIndex) -> Array
   prototype
     indexOf
     lastIndexOf
@@ -41,14 +64,15 @@ Array
     reduce
     reduceRight
     add(array) -> this
+    tack(...) -> this // Same as add, but uses arguments
 
 Function
   is(obj) -> Boolean
   prototype
-    bind
+    bind(self, args...) -> Function
     bindList(self, list) -> Function
-    mixin(obj) -> this
-    include|extend(obj) -> this
+    assign(obj) -> this
+    mixin(obj) -> this // This assigns properties into the prototype
 
 RegExp
   escape(str) -> String
@@ -62,22 +86,24 @@ String
     replaceAll(from, to) -> String
     toInt(radix) -> Number
     toFloat() -> Number
-    repeat(times = 2) -> String
+    repeat(times) -> String
     contains
     startsWith
     endsWith
 
 Math
   rand(from, to) -> Number
-  sign
+  sign(num) -> Number
+  trunc(num) -> Number
 
 Number
   is(obj) -> Boolean
   parseInt
   parse
-  isNaN
-  isFinite
-  isNumeric(obj) -> Boolean
+  isNaN(num) -> Boolean
+  isFinite(num) -> Boolean
+  isInteger(num) -> Boolean
+  isNumeric(val) -> Boolean
   global
     isNaN
     isFinite
@@ -92,7 +118,7 @@ Number
     ceil() -> Number
     pow(exp = 2) -> Number
     sqrt() -> Number
-    log(base) -> Number
+    log(base?) -> Number
     toRad() -> Number
     toDeg() -> Number
 
@@ -101,9 +127,68 @@ Boolean
 
 Date
   now() -> Number
+  prototype
+    getISODay() -> Number // The sunday is 7
+    getWeek() -> Number
+    getWeekYear() -> Number
+```
+
+## legio/oop/type
+```javascript
+type(parent?, definition) -> Function
+  OR(...)
+  UNDEFINED // val === undefined
+  DEFINED // val !== undefined
+  NULL // val === null
+  FULL // val !== undefined && val !== null
+  EMPTY // val === undefined || val === null
+```
+
+**Example:**
+```javascript
+var
+A = type({ b: String, c: Number }),
+B = type(A, { a: Function });
+
+var
+a = {
+  a: function () {},
+  b: "hello",
+  c: 42
+},
+b = {
+  a: "error",
+  b: "hello",
+  c: 42
+};
+
+console.log(A(a), A(b)); // true, true
+console.log(B(a), B(b)); // true, false
+
+var
+C = type({ d: type.UNDEFINED, a: type.OR(String, Function) });
+
+console.log(C(a), C(b)); // true, true
 ```
 
 ## legio/oop/construct
+```javascript
+construct(cfg) -> {construct}
+
+[cfg]
+  init: Function
+  inherit: Function
+  proto: Object
+  mixin: Object[]
+  own: Object
+
+{construct} : Function
+  Super: Function
+  superInit(...)
+  superCall(name, args)
+```
+
+**Example:**
 ```javascript
 var A = construct({
   init: function (a) {
@@ -150,63 +235,78 @@ var B = construct({
 
 ## legio/oop/struct
 ```javascript
+struct(names...) -> Function
+struct(names: String[], proto?, typeDefinition?) -> Function
+```
+
+**Example:**
+```javascript
 var Point = struct("x", "y", "z");
 
 var p = new Point(1, 2, 3); // p.x = 1; p.y = 2; p.z = 3;
-```
 
-## legio/oop/type
-```javascript
-var
-A = type({
-  b: String,
-  c: Number
-}),
-B = type(A, {
-  a: Function
-});
+var TypedPoint = struct(["x", "y", "z"], null, { x: Number, y: Number, z: type.OR(type.UNDEFINED, Number) });
 
 var
-a = {
-  a: function () {},
-  b: "hello",
-  c: 42
-},
-b = {
-  a: "error",
-  b: "hello",
-  c: 42
-};
-
-console.log(A(a), A(b)); // true, true
-console.log(B(a), B(b)); // true, false
+p1 = new TypedPoint(1, 2, 3), // Okay
+p2 = new TypedPoint(1, 2), // Okay
+p3 = new TypedPoint(1, "hello"); // Error
 ```
 
 ## legio/async
 ```javascript
+Async
+  denodeify(fn, that?) -> {(...) -> Promise}
+```
+
+## legio/async/task
+```javascript
+Task
+  run(fn)
+```
+
+## legio/async/promise
+```javascript
 Promise(that)
-  when(list: Promise[]) -> Promise
+  all(list: Promise[]) -> Promise
+  allDone(list: Promise[]) -> Promise
+  when(thenable) -> Promise
   prototype
     pending: Boolean
+    awaiting: Object
     resolved: Boolean
     rejected: Boolean
-    then(onResolve, onReject, onNotify) -> this
-    resolve(...) -> Boolean
-    reject(...) -> Boolean
-    notify(...) -> Boolean
-    bindResolve(...) -> Function
-    bindReject(...) -> Function
-    bindNotify(...) -> Function
 
-ChainPromise : Promise
-  prototype
-    then(onResolve, onReject, onNotify) -> Promise
+    then(onFulfilled, onRejected) -> Promise
+    notified(onNotified) -> this
+    fail(onRejected) -> Promise
+    always(handler) -> Promise
 
+    resolve(value)
+    fulfill(value) -> Boolean
+    reject(reason) -> Boolean
+    notify(argument) -> Boolean
+
+    bindResolve(value?) -> Function
+    bindFulfill(value?) -> Function
+    bindReject(reason?) -> Function
+    bindNotify(argument?) -> Function
+
+    nodeifyThen(callback) -> Promise
+    nodeifyResolve() -> Function
+```
+
+## legio/async/interval
+```javascript
 Interval(fn, time, wrap: Boolean)
+  start(time, immediately: Boolean) -> Promise
   prototype
     activate(immediately: Boolean, time)
     suspend()
+```
 
+## legio/async/timeout
+```javascript
 Timeout(fn, time, wrap: Boolean)
   start(time, that) -> Promise
   prototype
@@ -214,15 +314,26 @@ Timeout(fn, time, wrap: Boolean)
     cancel()
 ```
 
-## legio/util
+## legio/util/key
 ```javascript
-Key [enum]
+Key: {enum}
+```
 
+## legio/util/request
+```javascript
 Request
-  getXHR(file, async, post) -> XMLHttpRequest
-  file(file, cfg: { async: Boolean, callback: Function, get: String, post: String }) -> Promise | XMLHttpRequest
-  script(file, callback) -> Promise | HTMLScriptElement
+  file(file, cfg) -> Promise | String // A string is returned in case of a sync request
+  script(file) -> Promise // Just in a web browser
 
+[cfg]
+  async: Boolean
+  callback: Function
+  get: String
+  post: String
+```
+
+## legio/util/uri
+```javascript
 URI
   encode(str) -> String
   decode(str) -> String
@@ -230,4 +341,9 @@ URI
   decodeComponent(str) -> String
   create|stringify(obj) -> String
   parse(str) -> Object
+```
+
+## legio/util/xhr
+```javascript
+XMLHttpRequest
 ```

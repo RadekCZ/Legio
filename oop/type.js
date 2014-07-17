@@ -34,8 +34,13 @@ type.DEFINED = 1;
 type.UNDEFINED = 2;
 type.NULL = 3;
 type.FULL = 4;
+type.EMPTY = type.OR(type.UNDEFINED, type.NULL);
 
 function checkObject(obj) {
+  if (!Object.is(obj)) {
+    return false;
+  }
+
   var data = this;
 
   for (var i in data) if (Object.owns(data, i)) {

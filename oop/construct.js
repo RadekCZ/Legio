@@ -21,7 +21,7 @@ function construct(data) {
 
   if (Super) {
     inherits(Con, Super);
-    Con.include(Super);
+    Con.assign(Super);
   }
   // else if (Parent === null) {
     // Fn.prototype = Object.create(null);
@@ -44,7 +44,7 @@ function construct(data) {
   }
 
   if (own) {
-    Con.include(own);
+    Con.assign(own);
   }
 
   Con.prototype.constructor = Con;

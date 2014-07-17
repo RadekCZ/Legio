@@ -25,7 +25,7 @@ var Timeout = construct({
     start: function (time, that) {
       var
       prom = new Promise(that),
-      id = global.setTimeout(prom.bindResolve(), time);
+      id = global.setTimeout(prom.bindFulfill(), time);
 
       prom.then(null, function () {
         global.clearTimeout(id);

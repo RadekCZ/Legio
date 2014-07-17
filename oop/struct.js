@@ -4,37 +4,36 @@ Legio = require("../std"),
 type = require("./type");
 
 // The main function which generates a special constructor
-function struct(definition, defaults) {
+function struct(keysArr, proto, def) {
   var Con, keys = arguments, applyDefaults = true;
 
-  if (Object.is(definition)) {
-    var T = type(definition);
+  if (Array.is(keysArr)) {
+    keys = keysArr;
 
-    keys = Object.ownKeys(definition);
+    if (Object.is(def)) {
+      var T = type(def);
 
-    Con = function () {
-      fill(this, keys, arguments);
-      if (!T(this)) {
-        throw new TypeError("Wrong type passed.");
-      }
-    };
+      Con = function () {
+        fill(this, keys, arguments);
+        if (!T(this)) {
+          throw new TypeError("Wrong type passed.");
+        }
+      };
+    }
   }
   else {
-    if (Array.is(definition)) {
-      keys = definition;
-    }
-    else {
-      applyDefaults = false;
-    }
+    applyDefaults = false;
+  }
 
+  if (!Con) {
     Con = function () {
       fill(this, keys, arguments);
     };
   }
 
-  if (applyDefaults && defaults) {
-    Con.prototype = defaults;
-    Con.prototype.constructor = Con;
+  if (applyDefaults && proto) {
+    proto.constructor = Con;
+    Con.prototype = proto;
   }
 
   return Con;

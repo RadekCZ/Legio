@@ -1,31 +1,49 @@
 'use strict';
 var
 Legio = require("../std"),
-construct = require("../oop/construct");
+construct = require("../oop/construct"),
+Promise = require("./promise"),
+Task = require("./task");
 
 var Interval = construct({
   init: function (func, time, wrap) {
     var self = this;
 
-    this._count = 0;
-    this._func = wrap === false ? func : function () {
-      func.call(self, ++self._count);
+    this.count = 0;
+    this.callback = wrap === false ? func : function () {
+      func.call(self, ++self.count);
     };
 
-    this._time = time;
+    this.time = time;
   },
 
   proto: {
     activate: function (immediately, time) {
-      time === undefined && (time = this._time);
+      time === undefined && (time = this.time);
 
       if (immediately) {
-        global.setTimeout(this._func, 0);
+        Task.run(this.callback);
       }
-      this._id = global.setInterval(this._func, time);
+      this.id = global.setInterval(this.callback, time);
     },
     suspend: function () {
-      global.clearInterval(this._id);
+      global.clearInterval(this.id);
+    }
+  },
+
+  own: {
+    start: function (time, immediately, that) {
+      var
+      prom = new Promise(that),
+      inter = new Interval(prom.bindNotify(), time);
+
+      prom.then(null, function () {
+        inter.suspend();
+      });
+
+      inter.activate(immediately);
+
+      return prom;
     }
   }
 });
