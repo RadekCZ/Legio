@@ -52,7 +52,7 @@ var Request = {
 
     xhr.send(cfg.post);
 
-    return promise || xhr;
+    return promise || xhr.responseText;
   }
 };
 
