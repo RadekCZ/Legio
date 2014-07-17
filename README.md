@@ -267,7 +267,7 @@ Task
 
 ## legio/async/promise
 ```javascript
-Promise(that)
+Promise()
   all(list: Promise[]) -> Promise
   allDone(list: Promise[]) -> Promise
   when(thenable) -> Promise
@@ -308,7 +308,7 @@ Interval(fn, time, wrap: Boolean)
 ## legio/async/timeout
 ```javascript
 Timeout(fn, time, wrap: Boolean)
-  start(time, that) -> Promise
+  start(time) -> Promise
   prototype
     start(time)
     cancel()

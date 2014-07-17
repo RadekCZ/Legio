@@ -22,9 +22,9 @@ var Timeout = construct({
   },
 
   own: {
-    start: function (time, that) {
+    start: function (time) {
       var
-      prom = new Promise(that),
+      prom = new Promise(),
       id = global.setTimeout(prom.bindFulfill(), time);
 
       prom.then(null, function () {
