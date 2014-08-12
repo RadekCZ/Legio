@@ -1,6 +1,6 @@
 {
   "name": "legio",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "A simple JavaScript library for handling routine tasks.",
   "author": {
     "name": "Radomír Žemlička",
@@ -13,13 +13,13 @@
     "url": "https://github.com/RadekCZ/Legio.git"
   },
   "main": "./std",
-  "browser": {
-    "xmlhttprequest": "./util/xmlhttprequest"
-  },
   "bin": {},
-  "dependencies": {
-    "setimmediate": "1.0.2",
-    "xmlhttprequest": "1.6.0"
+  "dependencies": {},
+  "devDependencies": {
+    "expect.js": "^0.3.1"
+  },
+  "scripts": {
+    "test": "mocha test/spec"
   },
   "engines": {
     "node": "*"

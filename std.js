@@ -1,11 +1,6 @@
 'use strict';
 
-// The main object
-function Legio() { return Legio; }
-
-// Functions for handling null & undefined values together
-var nil = Legio.nil = function (obj) { return obj === undefined || obj === null; };
-Legio.or = function (val, elseVal) { return nil(val) ? elseVal : val; };
+/** @module legio */
 
 // Extensions of the base library
 require("./ext/object");
@@ -18,7 +13,23 @@ require("./ext/number");
 require("./ext/boolean");
 require("./ext/date");
 
-// The setImmediate implementation
-require("setimmediate");
+/**
+ * @alias module:legio
+ * @ignore
+ */
+function Legio() { return Legio; }
+
+/**
+ * @param {*} value
+ * @returns {Boolean} A boolean determining whether the value is both not null and not undefined.
+ */
+Legio.empty = function (obj) { return obj === undefined || obj === null; };
+
+/**
+ * @param {*} value1
+ * @param {*} value2
+ * @returns {*} The first of values which is both not null and not undefined. Otherwise the second value.
+ */
+Legio.choose = function (val1, val2) { return Legio.empty(val1) ? val2 : val1; };
 
 module.exports = Legio;
