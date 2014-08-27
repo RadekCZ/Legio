@@ -80,17 +80,22 @@ if (!Object.keys || Object.DEBUG) {
 
 /**
  * Determines whether the object doesn't have any own properties (so it's empty) or is an empty value
- * (null, undefined, 0, NaN, false, "").
+ * (null, undefined, 0, NaN, "").
  * @param {*} value
  * @returns {Boolean}
  */
 Object.empty = function (obj) {
-  if (obj) {
+  if (Object.isAny(obj)) {
+    if (Array.is(obj)) {
+      return obj.length > 0;
+    }
+
     for (var prop in obj) if (Object.owns(obj, prop)) {
       return false;
     }
   }
-  return true;
+
+  return !(Boolean.is(obj) || Function.is(obj) || obj);
 };
 
 /**
