@@ -12,7 +12,7 @@ FunctionProto = Function.prototype;
  */
 Function.is = function (obj) { return typeof obj === "function"; };
 
-if (!FunctionProto.bind) {
+if (!FunctionProto.bind || Object.DEBUG) {
   /**
    * @alias Function#bind
    * @param {Object} that
@@ -35,7 +35,7 @@ if (!FunctionProto.bind) {
       return function () { return func.apply(this instanceof Empty && that ? this : that, arguments); };
     }
 
-    var args = Array.from(arguments, 1);
+    var args = Array.from(arguments).removeAt(0);
     return function () { return func.apply(this instanceof Empty && that ? this : that, args.concat(Array.from(arguments))); }
   };
 }

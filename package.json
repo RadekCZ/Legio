@@ -7,7 +7,7 @@
     "email": "info@razem.cz",
     "url": "http://razem.cz"
   },
-  "licence": "LGPL",
+  "license": "LGPL",
   "repository": {
     "type": "git",
     "url": "https://github.com/RadekCZ/Legio.git"
@@ -16,10 +16,11 @@
   "bin": {},
   "dependencies": {},
   "devDependencies": {
-    "expect.js": "^0.3.1"
+    "mocha": "~1.21.4",
+    "expect.js": "~0.3.1"
   },
   "scripts": {
-    "test": "mocha test/spec"
+    "test": "mocha test/index"
   },
   "engines": {
     "node": "*"

@@ -5,7 +5,7 @@
 var
 DateProto = Date.prototype;
 
-if (!Date.now) {
+if (!Date.now || Object.DEBUG) {
   /**
    * Gives the current UNIX timestamp in milliseconds.
    * @returns {Number}

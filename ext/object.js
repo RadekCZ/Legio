@@ -159,14 +159,21 @@ Object.merge = function () {
  * Simulates the foreach loop.
  * @param {Object|Array} collection
  * @param {Function} callback
+ * @param {Boolean} [arrayLike=false] forces the loop to iterate the object the same way as an array
  * @returns {Object|Array} The given collection
  */
-Object.each = function (obj, func) {
-  if (Array.is(obj)) {
-    return obj.each(func);
+Object.each = function (obj, func, arrayLike) {
+  if (Array.is(obj) || arrayLike) {
+    for (var i = 0; i < obj.length; ++i) {
+      if (func.call(obj, obj[i], i, obj) === false) {
+        break;
+      }
+    }
+
+    return obj;
   }
 
-  for (var i in obj) if (Object.owns(obj, i)) {
+  for (var i in obj) if (hasOwn.call(obj, i)) {
     if (func.call(obj, obj[i], i, obj) === false) {
       break;
     }

@@ -1,7 +1,7 @@
 'use strict';
 var
 expect = require("expect.js"),
-Legio = require("../std");
+Legio = require("../../std");
 
 describe("String", function () {
   describe(".is()", function () {

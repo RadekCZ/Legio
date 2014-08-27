@@ -21,7 +21,7 @@ function Legio() { return Legio; }
 
 /**
  * @param {*} value
- * @returns {Boolean} A boolean determining whether the value is both not null and not undefined.
+ * @returns {Boolean} A boolean determining whether the value is null or undefined
  */
 Legio.empty = function (obj) { return obj === undefined || obj === null; };
 

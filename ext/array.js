@@ -112,6 +112,21 @@ ArrayProto.remove = function (item) {
 };
 
 /**
+ * Removes an item at the given index from the array.
+ * @alias Array#removeAt
+ * @param {Number} [index=0]
+ * @param {Number} [amount=1]
+ * @returns {this}
+ */
+ArrayProto.removeAt = function (ind, amount) {
+  amount === undefined && (amount = 1);
+
+  this.splice(ind, amount);
+
+  return this;
+};
+
+/**
  * Inserts the given items in the array at the given index.
  * @alias Array#insert
  * @param {Number}

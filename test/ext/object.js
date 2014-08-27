@@ -1,7 +1,7 @@
 'use strict';
 var
 expect = require("expect.js"),
-Legio = require("../std");
+Legio = require("../../std");
 
 describe("Object", function () {
   describe(".isAny() & .isPlain()", function () {
@@ -136,6 +136,13 @@ describe("Object", function () {
       });
 
       expect(i).to.be(res.length);
+
+      var j = 0;
+      Object.each({ 0: 1, 1: 2, 2: 3, length: 3 }, function (val, key) {
+        j += val;
+      }, true);
+
+      expect(j).to.be(6);
     });
   });
 
