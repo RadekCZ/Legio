@@ -93,6 +93,8 @@ Object.empty = function (obj) {
     for (var prop in obj) if (Object.owns(obj, prop)) {
       return false;
     }
+
+    return true;
   }
 
   return !(Boolean.is(obj) || Function.is(obj) || obj);

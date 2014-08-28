@@ -50,6 +50,35 @@ StringProto.encodeURI = function (partial) { return partial ? encURI(this) : enc
 StringProto.decodeURI = function (partial) { return partial ? decURI(this) : decURIParam(this); };
 
 /**
+ * @alias String#encodeHTML
+ * @returns {String} HTML-encoded value
+ */
+StringProto.encodeHTML = function () {
+  return this.replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
+    .replace(/\//g, "&#47;");
+};
+
+/**
+ * @alias String#decodeHTML
+ * @returns {String} HTML-decoded value
+ */
+StringProto.decodeHTML = function () {
+  return this.replace(/&#(x)?([\w\d]{0,5});/g, function (match, hexa, code) {
+    return String.fromCharCode(code.toInt(hexa ? 16 : 10));
+  })
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&");
+};
+
+/**
  * Default value used in pad functions.
  * @type {String}
  */

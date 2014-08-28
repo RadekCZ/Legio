@@ -43,6 +43,13 @@ describe("String", function () {
     });
   });
 
+  describe("#encodeHTML() & #decodeHTML()", function () {
+    it("converts a string to its HTML-safe form or parses it", function () {
+      expect("<>'\"/& \\ test".encodeHTML()).to.be("&lt;&gt;&#39;&quot;&#47;&amp; \\ test");
+      expect("&lt;&gt;&#39;&quot;&#47;&amp;&nbsp;&#54;&#x2a;".decodeHTML()).to.be("<>'\"/& " + String.fromCharCode(54) + String.fromCharCode(42));
+    });
+  });
+
   describe("#pad()", function () {
     it("pads the string to a given size", function () {
       expect("a".pad(3)).to.be(" a ");
