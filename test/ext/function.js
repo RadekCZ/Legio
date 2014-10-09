@@ -20,7 +20,7 @@ describe("Function", function () {
     });
   });
 
-  describe("#bind() & #bindList()", function () {
+  describe("#bind() & #bindArray()", function () {
     it("returns a new function with bound `this` and arguments", function () {
       (function (a) {
         expect(a).to.be(1);
@@ -28,12 +28,28 @@ describe("Function", function () {
 
       (function (a, b) {
         expect(a + b).to.be(3);
-      }.bindList(null, [1, 2]))();
+      }.bindArray(null, [1, 2]))();
 
       var obj = {};
       (function () {
         expect(this).to.be(obj);
       }.bind(obj))();
+    });
+  });
+
+  describe("#tie() & #tieArray()", function () {
+    it("returns a new function with tied arguments", function () {
+      var obj = {};
+
+      (function (a) {
+        expect(a).to.be(1);
+        expect(this).to.be(obj);
+      }.tie(1)).call(obj);
+
+      (function (a, b) {
+        expect(a + b).to.be(3);
+        expect(this).to.be(obj);
+      }.tieArray([1, 2])).call(obj);
     });
   });
 

@@ -41,14 +41,48 @@ if (!FunctionProto.bind || Object.DEBUG) {
 }
 
 /**
- * @alias Function#bindList
+ * @alias Function#bindArray
  * @param {Object} that
  * @param {Array} args
  * @returns {Function}
  * @throws {TypeError}
  */
-FunctionProto.bindList = function (that, args) {
+FunctionProto.bindArray = function (that, args) {
   return this.bind.apply(this, [that].add(args));
+};
+
+
+/**
+ * Alias for {Function#bindArray}
+ * @alias Function#bindList
+ * @function
+ * @deprecated since v0.3.1
+ */
+FunctionProto.bindList = FunctionProto.bindArray;
+
+/**
+ * Similar to bind, but with dynamic `this`
+ * @alias Function#tie
+ * @param {...*} args
+ * @returns {Function}
+ */
+FunctionProto.tie = function () {
+  var
+  fn = this,
+  args = Array.from(arguments);
+
+  return function () {
+    fn.apply(this, args.concat(Array.from(arguments)));
+  };
+};
+
+/**
+ * @alias Function#tieArray
+ * @param {Array} args
+ * @returns {Function}
+ */
+FunctionProto.tieArray = function (args) {
+  return this.tie.apply(this, args);
 };
 
 /**
